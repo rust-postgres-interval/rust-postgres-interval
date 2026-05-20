@@ -1,4 +1,3 @@
-#[cfg(feature = "postgres")]
 mod integrations;
 
 mod interval_fmt;
