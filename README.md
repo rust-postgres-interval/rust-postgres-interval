@@ -19,5 +19,10 @@ fn main() {
     ).unwrap();
     let output = interval.to_iso_8601();
     assert_eq!(String::from("P1Y1M1DT1H"), output);
+
+    let interval = Interval::from_std_duration(
+        std::time::Duration::from_secs(3_661)
+    ).unwrap();
+    assert_eq!(Interval::new(0, 0, 3_661_000_000), interval);
 }
 ```
