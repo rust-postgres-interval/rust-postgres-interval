@@ -1,6 +1,6 @@
 [package]
 name = "pg_interval"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2024"
 authors = ["Ryan Piper <piper.ryan235@gmail.com>", "Ning Sun <n@sunng.info>"]
 license = "MIT"
