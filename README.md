@@ -26,3 +26,12 @@ fn main() {
     assert_eq!(Interval::new(0, 0, 3_661_000_000), interval);
 }
 ```
+
+## Features
+
+Both features are on by default.
+
+- `postgres`: `FromSql` and `ToSql` for the `postgres` driver.
+- `chrono`: `Interval::from_duration` from chrono's `Duration`. Without it,
+  the crate does not depend on chrono; `Interval::from_std_duration` is
+  always available.
