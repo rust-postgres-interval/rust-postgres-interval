@@ -50,6 +50,12 @@ jobs:
       - name: Run Tests
         run: cargo test --verbose
 
+      - name: Lint without default features
+        run: cargo clippy --no-default-features -- -D warnings
+
+      - name: Run Tests without default features
+        run: cargo test --verbose --no-default-features
+
   publish:
     name: Publish to Crates.io
     runs-on: ubuntu-latest

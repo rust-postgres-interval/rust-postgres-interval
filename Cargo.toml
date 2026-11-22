@@ -12,10 +12,12 @@ include = ["src/*", "Cargo.toml", "LICENSE", "README.md"]
 categories = ["date-and-time"]
 
 [features]
-default = ["postgres"]
-postgres = ["postgres-types"]
+default = ["postgres", "chrono"]
+postgres = ["postgres-types", "dep:bytes"]
+# `Interval::from_duration` from chrono's `Duration`.
+chrono = ["dep:chrono"]
 
 [dependencies]
-chrono = { version = "^0.4" }
-bytes = { version = "^1" }
+chrono = { version = "^0.4", optional = true }
+bytes = { version = "^1", optional = true }
 postgres-types = { version = "^0.2", optional = true }

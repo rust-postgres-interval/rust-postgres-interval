@@ -1,4 +1,5 @@
 use crate::{Interval, interval_norm::IntervalNorm};
+#[cfg(feature = "chrono")]
 use chrono::Duration;
 
 const SECS_PER_MINUTE: u64 = 60;
@@ -11,6 +12,7 @@ impl Interval {
     /// Tries to convert from the chrono `Duration` type to a `Interval`. Will
     /// return `None` on a overflow. This is a lossy conversion in that
     /// any units smaller than a microsecond will be lost.
+    #[cfg(feature = "chrono")]
     pub fn from_duration(duration: Duration) -> Option<Interval> {
         let days = duration.num_days();
         let mut new_dur = duration - Duration::days(days);
@@ -77,35 +79,40 @@ fn reduce_by_units(nano_secs: i64, unit: i64) -> (i64, i64) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use chrono::Duration;
     use std::time::Duration as StdDuration;
 
-    #[test]
-    fn can_convert_small_amount_of_days() {
-        let dur = Duration::days(5);
-        let interval = Interval::from_duration(dur);
-        assert_eq!(interval, Some(Interval::new(0, 5, 0)))
-    }
+    #[cfg(feature = "chrono")]
+    mod chrono_duration {
+        use crate::Interval;
+        use chrono::Duration;
 
-    #[test]
-    fn overflow_on_days() {
-        let dur = Duration::days(100000000000);
-        let interval = Interval::from_duration(dur);
-        assert_eq!(interval, None)
-    }
+        #[test]
+        fn can_convert_small_amount_of_days() {
+            let dur = Duration::days(5);
+            let interval = Interval::from_duration(dur);
+            assert_eq!(interval, Some(Interval::new(0, 5, 0)))
+        }
 
-    #[test]
-    fn can_convert_small_amount_of_secs() {
-        let dur = Duration::seconds(1);
-        let interval = Interval::from_duration(dur);
-        assert_eq!(interval, Some(Interval::new(0, 0, 1_000_000)))
-    }
+        #[test]
+        fn overflow_on_days() {
+            let dur = Duration::days(100000000000);
+            let interval = Interval::from_duration(dur);
+            assert_eq!(interval, None)
+        }
 
-    #[test]
-    fn can_convert_one_micro() {
-        let dur = Duration::nanoseconds(1000);
-        let interval = Interval::from_duration(dur);
-        assert_eq!(interval, Some(Interval::new(0, 0, 1)))
+        #[test]
+        fn can_convert_small_amount_of_secs() {
+            let dur = Duration::seconds(1);
+            let interval = Interval::from_duration(dur);
+            assert_eq!(interval, Some(Interval::new(0, 0, 1_000_000)))
+        }
+
+        #[test]
+        fn can_convert_one_micro() {
+            let dur = Duration::nanoseconds(1000);
+            let interval = Interval::from_duration(dur);
+            assert_eq!(interval, Some(Interval::new(0, 0, 1)))
+        }
     }
 
     #[test]
